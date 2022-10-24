@@ -1,6 +1,14 @@
 #include <bits/stdc++.h>
-#define int long long 
+
 using namespace std;
+
+#define int long long 
+
+const int N = 1e5 + 5;
+
+int indexes[N], result[N];
+
+vector<pair<int,int>>arr;
 
 bool cmp(pair<int,int> p1,pair<int,int> p2){
     if(p1.first == p2.first){
@@ -12,9 +20,9 @@ bool cmp(pair<int,int> p1,pair<int,int> p2){
 }
 
 int32_t main(){
-    int num,police,result=0;
+    int num,police;
     cin>>num>>police;
-    vector<pair<int,int>>arr;
+    
     for(int i=0;i<police;i++){
         int a,b;
         cin>>a>>b;
@@ -22,26 +30,26 @@ int32_t main(){
     }
     sort(arr.begin(),arr.end(),cmp);
 
-    int j =0;
-
-
-    for(int i=1;i<=num;){
-        if(j>arr.size()-1){
-            result++;
-            i++;
-        }
-        else if(i<arr[j].first){
-            result++;
-            i++;
-        }
-        else if(i>=arr[j].first and i<=arr[j].second){
-            result++;
-            i=arr[j].second+1;
+    int j = arr[0].first;
+    for(int i=1;i<j;i++){
+        indexes[i] = i-1;
+    }
+    for(int i=0;i<arr.size();i++){
+        while(j<=arr[i].first){
+            indexes[j] = j-1;
             j++;
         }
-        else if(i>arr[j].second){
+        while(j<=arr[i].second){
+            indexes[j] = arr[i].first-1;
             j++;
         }
     }
-    cout<<result;
+    while(j<=num){
+        indexes[j] = j-1;
+        j++;
+    }
+    for(int i=1;i<=num;i++){
+        result[i] = result[indexes[i]]+1;
+    }
+    cout<<result[num];
 }
