@@ -6,20 +6,39 @@ using namespace std;
 
 const int N = 1e6 + 10;
 
-int a[N], b[N];
+int a[N],dp[N];
+
 int n;
 
+
+int search(int dp[N],int r,int num){
+    int l = 0;
+    while( r - l > 1){
+        int middle = (l + r)/2;
+        if(num>dp[middle]){
+            l = middle;
+        }
+        else{
+            r = middle;
+        }
+    }
+    return r;
+}
+
+
 int32_t main(){
+
+    int count = 1;
     cin >> n;
     for (int i = 0; i < n; i++) {
-        cin >> a[i];
-        b[i] = i;
+        cin>>a[i];
     }
-    sort(b, b + n, [&](int i, int j){if (a[i] == a[j]) return i > j;return a[i] < a[j];});
-    int ans = 1;
-    for (int i = 1; i < n; i++) {
-        if (b[i] > b[i - 1] && a[b[i]] > a[b[i - 1]])
-            ans++;
+    dp[1] = a[0];
+    for(int i = 0; i<n; i++){
+        int index = search(dp,count+1,a[i]);
+        dp[index] = a[i];
+        if(index > count)
+            count = index;
     }
-    cout << ans;
+    cout<<count;
 }
